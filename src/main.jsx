@@ -5,6 +5,13 @@ import './index.css'
 import App from './App.jsx'
 import Nev from './component/Nev.jsx'
 
+const storedTheme = localStorage.getItem('theme')
+if (storedTheme === 'dark') {
+  document.documentElement.classList.add('dark')
+} else {
+  document.documentElement.classList.remove('dark')
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

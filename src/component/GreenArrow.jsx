@@ -1,8 +1,8 @@
 import React from 'react'
 
-function GreenArrow() {
+function GreenArrow({ color = "#80C537" }) {
   return (
-    <span className="text-[#A5FF46] text-[0.7em]">→</span>
+    <span className="text-[0.7em]" style={{ color }}>→</span>
   )
 }
 

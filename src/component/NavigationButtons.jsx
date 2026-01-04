@@ -14,18 +14,18 @@ export default function NavigationButtons({ currentSlide, setCurrentSlide, total
     <div className="flex items-center gap-4">
       <button
         onClick={goToPrevious}
-        className="w-12 h-12 border border-slate-600 hover:border-slate-400 transition-colors flex items-center justify-center group"
+        className="w-12 h-12 border border-black hover:border-black transition-all flex items-center justify-center group hover:scale-110"
         aria-label="Previous slide"
       >
-        <ChevronLeft className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+        <ChevronLeft className="w-5 h-5 text-slate-500 group-hover:text-slate-900 transition-colors" />
       </button>
       
       <button
         onClick={goToNext}
-        className="w-12 h-12 border border-slate-600 hover:border-slate-400 transition-colors flex items-center justify-center group"
+        className="w-12 h-12 border border-black hover:border-black transition-all flex items-center justify-center group hover:scale-110"
         aria-label="Next slide"
       >
-        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+        <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-slate-900 transition-colors" />
       </button>
     </div>
   );
