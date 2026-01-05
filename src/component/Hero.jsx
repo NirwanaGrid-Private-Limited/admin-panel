@@ -59,7 +59,7 @@ function Hero({ text, text2, text3, handleTextChange }) {
             {text3}
           </span>
 
-          <KnowMoreButton />
+          <KnowMoreButton className="mt-14 sm:mt-16 lg:mt-20 mx-auto sm:mx-0" />
         </div>
       </div>
 
