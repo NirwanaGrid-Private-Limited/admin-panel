@@ -5,6 +5,7 @@ import { QuickLinksSection } from '../component/Quicklink1'
 import { Houseinstall } from '../component/Houseinstall'
 import WhyChoose from '../component/Whychoose'
 import {InnovationsSection} from '../component/innovationtab'
+import { Testimonial } from '../component/Testimonial'
 
 
 function Home() {
@@ -41,6 +42,9 @@ function Home() {
       </div>
       <div>
         <InnovationsSection />
+      </div>
+      <div>
+        <Testimonial />
       </div>
     </div>
   )
