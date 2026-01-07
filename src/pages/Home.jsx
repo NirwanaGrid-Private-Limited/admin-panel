@@ -6,6 +6,8 @@ import { Houseinstall } from '../component/Houseinstall'
 import WhyChoose from '../component/Whychoose'
 import {InnovationsSection} from '../component/innovationtab'
 import { Testimonial } from '../component/Testimonial'
+import TechSpecs from '../component/TechSpecs'
+import DownloadApp from '../component/DownloadApp'
 
 
 function Home() {
@@ -45,6 +47,12 @@ function Home() {
       </div>
       <div>
         <Testimonial />
+      </div>
+      <div>
+        <TechSpecs />
+      </div>
+      <div>
+        <DownloadApp />
       </div>
     </div>
   )

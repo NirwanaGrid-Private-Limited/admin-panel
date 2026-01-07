@@ -3,6 +3,7 @@ import imgTestimonialSectionImg from "../assets/tetstimonialsec.png";
 import imgStandingMan from "../assets/testinomialsechumann.png";
 import { TESTIMONIALS_DATA } from "./mockData";
 import NavigationButtons from "./NavigationButtons";
+import PaginationDots from "./ui/PaginationDots";
 
 function Testimonial() {
   const textTestimonials = TESTIMONIALS_DATA.filter((t) => !t.isVideo);
@@ -241,22 +242,18 @@ function Testimonial() {
             </div>
 
             {/* Pagination Dots */}
-            <div className="mt-6 flex gap-2 justify-center">
-                {videoTestimonials.map((_, idx) => (
-                  <div 
-                    key={idx}
-                    onClick={() => {
-                      setIsArrowClicked(true);
-                      setIsVideoSliding(true);
-                      setTimeout(() => {
-                        setCurrentVideoIndex(idx);
-                        setIsVideoSliding(false);
-                      }, 300);
-                    }}
-                    className={`h-1 rounded-full cursor-pointer transition-all duration-300 ${idx === currentVideoIndex ? 'w-6 bg-[#3a8bca]' : 'w-3 bg-white/20 hover:bg-white/40'}`}
-                  />
-                ))}
-            </div>
+            <PaginationDots
+              total={videoTestimonials.length}
+              current={currentVideoIndex}
+              onClick={(idx) => {
+                setIsArrowClicked(true);
+                setIsVideoSliding(true);
+                setTimeout(() => {
+                  setCurrentVideoIndex(idx);
+                  setIsVideoSliding(false);
+                }, 300);
+              }}
+            />
 
             {/* Navigation Buttons - Below dots, aligned to the right */}
             <div className="mt-20 flex justify-end pr-0">
