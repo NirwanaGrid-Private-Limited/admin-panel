@@ -59,7 +59,7 @@ function TechSpecs() {
       <div className="container mx-auto px-4 md:px-8">
         <h2
           className="text-4xl md:text-5xl font-bold mb-16 text-center md:text-left bg-clip-text text-transparent bg-cover bg-center"
-          style={{ backgroundImage: `url(${imgTechnologyThatWorksForYou})`, WebkitBackgroundClip: "text" }}
+          style={{ backgroundImage: `url(${imgTechnologyThatWorksForYou})`, WebkitBackgroundClip: "text", lineHeight: 1.2, paddingBottom: '0.3em' }}
         >
           Technology That Works for You
         </h2>

@@ -64,9 +64,9 @@ function QuickLinksSection() {
           
           {/* Quick Links Column */}
           <div className="md:col-span-1 lg:col-span-5 space-y-4 md:space-y-6 lg:space-y-8">
-            <h2 className="text-3xl sm:text-4xl md:text-[32px] lg:text-[42px] xl:text-[42px] 2xl:text-[52px] font-normal text-[#08111f] leading-tight md:leading-[50px] lg:leading-[70px] xl:leading-[70px] 2xl:leading-[86px] text-center md:text-left" style={{fontFamily: 'Avenir LT Std', fontWeight: 400, textShadow: '0px 5px 7px rgba(0, 0, 0, 0.25)'}}>Quick links</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-[32px] lg:text-[42px] xl:text-[42px] 2xl:text-[52px] font-normal text-[#08111f] leading-tight md:leading-[50px] lg:leading-[70px] xl:leading-[70px] 2xl:leading-[86px] text-center md:text-left" style={{fontFamily: 'Avenir LT Std', fontWeight: 400}}>Quick links</h2>
             <div className="grid grid-cols-2 gap-y-2 sm:gap-y-3 md:gap-y-4 lg:gap-y-6 xl:gap-y-6 2xl:gap-y-9 gap-x-2 sm:gap-x-4 md:gap-x-4 lg:gap-x-6 xl:gap-x-6 2xl:gap-x-120 justify-items-center md:justify-items-start">
-              {links.map((link, idx) => <a key={idx} href="#" className="flex items-center justify-between group text-[#08111f] text-xs sm:text-sm md:text-xs lg:text-sm xl:text-sm 2xl:text-[28px] hover:text-[#A5FF46] transition-colors py-1 2xl:py-2 whitespace-nowrap min-w-[130px] sm:min-w-[150px] md:min-w-[140px] lg:min-w-[170px] xl:min-w-[180px] 2xl:min-w-[380px]" style={{fontFamily: 'Avenir LT Std', fontWeight: 400, textShadow: '0px 5px 7px rgba(0, 0, 0, 0.25)'}}>
+              {links.map((link, idx) => <a key={idx} href="#" className="flex items-center justify-between group text-[#08111f] text-xs sm:text-sm md:text-xs lg:text-sm xl:text-sm 2xl:text-[28px] hover:text-[#A5FF46] transition-colors py-1 2xl:py-2 whitespace-nowrap min-w-[130px] sm:min-w-[150px] md:min-w-[140px] lg:min-w-[170px] xl:min-w-[180px] 2xl:min-w-[380px]" style={{fontFamily: 'Avenir LT Std', fontWeight: 400}}>
                   <span>{link}</span>
                   <span className="w-3 h-3 sm:w-3 sm:h-3 md:w-3 md:h-3 lg:w-3 lg:h-3 xl:w-3 xl:h-3 2xl:w-5 2xl:h-5 ml-1 sm:ml-2 md:ml-2 lg:ml-3 xl:ml-3 2xl:ml-12 flex items-center justify-center flex-shrink-0">
                     <GreenArrow />
@@ -84,7 +84,7 @@ function QuickLinksSection() {
           {/* Existing Problems Column */}
           <div className="md:col-span-1 lg:col-span-7 space-y-4 md:space-y-6 lg:space-y-8">
             <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start lg:justify-end gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8">
-              <h2 className="text-2xl sm:text-3xl md:text-[24px] lg:text-[32px] xl:text-[40px] font-normal text-[#08111f] leading-tight md:leading-[40px] lg:leading-[60px] xl:leading-[86px] text-center md:text-left" style={{fontFamily: 'Avenir LT Std', fontWeight: 400, textShadow: '0px 5px 7px rgba(0, 0, 0, 0.4)'}}>Existing Problems</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-[24px] lg:text-[32px] xl:text-[40px] font-normal text-[#08111f] leading-tight md:leading-[40px] lg:leading-[60px] xl:leading-[86px] text-center md:text-left" style={{fontFamily: 'Avenir LT Std', fontWeight: 400}}>Existing Problems</h2>
               <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <NavigationButtons currentSlide={currentIndex} setCurrentSlide={setCurrentIndex} totalSlides={problems.length} />
               </div>
@@ -96,7 +96,7 @@ function QuickLinksSection() {
                            <div className="h-12 sm:h-16 md:h-16 lg:h-20 xl:h-28 2xl:h-32 w-full relative mb-2 md:mb-3 lg:mb-4">
                                {item.icon && <img src={item.icon} alt="" className="object-contain w-full h-full object-left" />}
                            </div>
-                           <p className="text-[#08111f] text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg 2xl:text-xl leading-snug" style={{fontFamily: 'Avenir LT Std', fontWeight: 600, textAlign: 'left', textShadow: '0px 4px 10px rgba(5, 9, 57, 0.46)'}}>
+                           <p className="text-[#08111f] text-xs sm:text-sm md:text-sm lg:text-base xl:text-lg 2xl:text-xl leading-snug" style={{fontFamily: 'Avenir LT Std', fontWeight: 600, textAlign: 'left'}}>
                                {item.text}
                            </p>
                         </div>)}

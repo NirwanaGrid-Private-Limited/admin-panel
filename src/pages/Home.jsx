@@ -8,6 +8,7 @@ import {InnovationsSection} from '../component/innovationtab'
 import { Testimonial } from '../component/Testimonial'
 import TechSpecs from '../component/TechSpecs'
 import DownloadApp from '../component/DownloadApp'
+import { VideosSection } from '../component/VideoSection'
 
 
 function Home() {
@@ -53,6 +54,9 @@ function Home() {
       </div>
       <div>
         <DownloadApp />
+      </div>
+      <div>
+        <VideosSection/>
       </div>
     </div>
   )
