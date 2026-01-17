@@ -9,6 +9,7 @@ import { Testimonial } from '../component/Testimonial'
 import TechSpecs from '../component/TechSpecs'
 import DownloadApp from '../component/DownloadApp'
 import { VideosSection } from '../component/VideoSection'
+import { Footer } from '../component/Footer'
 
 
 function Home() {
@@ -55,9 +56,13 @@ function Home() {
       <div>
         <DownloadApp />
       </div>
-      <div>
+   <div>
         <VideosSection/>
-      </div>
+        </div>
+        <div>
+          <Footer/>
+        </div>
+      
     </div>
   )
 }
