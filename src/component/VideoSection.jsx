@@ -29,7 +29,7 @@ function VideosSection() {
   };
 
   return (
-    <section className="py-24 bg-white text-black">
+    <section className="py-0 bg-white text-black mb-8">
       <div className="container mx-auto px-4 md:px-8">
         <div className="mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6">

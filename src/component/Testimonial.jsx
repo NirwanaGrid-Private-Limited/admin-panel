@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import imgTestimonialSectionImg from "../assets/tetstimonialsec.png";
-import imgStandingMan from "../assets/testinomialsechumann.png";
+import imgStandingMan from "../assets/gifdownlaodsec.gif";
 import { TESTIMONIALS_DATA } from "./mockData";
 import NavigationButtons from "./NavigationButtons";
 import PaginationDots from "./ui/PaginationDots";
@@ -125,8 +125,9 @@ function Testimonial() {
             <img 
               src={imgStandingMan} 
               alt="Customer" 
-              className="w-[373px] h-[370px] object-contain"
+              className="w-[373px] h-[370px]"
               style={{
+                objectFit: 'cover',
                 boxShadow: '0px 25px 30.1px 0px rgba(0, 0, 0, 0.25)'
               }}
             />
@@ -182,7 +183,7 @@ function Testimonial() {
     /* Video Cards (Right Side) with Navigation Arrows */
   }
           <div 
-            className="w-full lg:w-auto flex flex-col items-end justify-center pr-0 lg:pr-2 xl:pr-8 2xl:pr-16"
+            className="w-full lg:w-auto flex flex-col items-end justify-center  pr-0 lg:pr-2 xl:pr-8 2xl:pr-16"
             style={{ alignItems: 'flex-end', marginLeft: 'auto' }}
             onMouseEnter={() => setIsVideoHovered(true)}
             onMouseLeave={handleVideoSectionMouseLeave}

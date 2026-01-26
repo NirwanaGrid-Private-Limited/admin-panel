@@ -55,10 +55,8 @@ function Home() {
       </div>
       <div>
         <DownloadApp />
+        <VideosSection />
       </div>
-   <div>
-        <VideosSection/>
-        </div>
         <div>
           <Footer/>
         </div>
