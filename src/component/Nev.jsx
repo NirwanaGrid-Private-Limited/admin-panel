@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
 import { CgProfile } from "react-icons/cg";
 import logo from '/logo.png'
+import { Link } from 'react-router-dom';
 
 function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -34,18 +35,18 @@ function Nav() {
 
         {/* Desktop Navigation Links */}
         <div className='hidden lg:flex items-center gap-[20px] xl:gap-[40px]'>
-          <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
+          <Link to='/' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Home
-          </button>
+          </Link>
           <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             About us
           </button>
           <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Contact us
           </button>
-          <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
+          <Link to='/product' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Our products
-          </button>
+          </Link>
         </div>
 
         {/* Sign Up Button & Hamburger Menu */}
@@ -93,12 +94,13 @@ function Nav() {
             >
               Contact us
             </button>
-            <button 
+            <Link 
+              to='/product'
               onClick={() => setIsMenuOpen(false)}
               className='text-slate-700 text-[14px] sm:text-[15px] font-normal text-left hover:text-[#A5FF46] transition-colors duration-200 py-2 border-b border-black'
             >
               Our products
-            </button>
+            </Link>
             <button 
               onClick={() => setIsMenuOpen(false)}
               className='flex items-center gap-[10px] px-[15px] sm:px-[20px] py-[8px] border-[1.5px] border-black rounded-[6px] text-slate-700 text-[14px] font-normal hover:border-black transition-all duration-200 w-fit mt-2'
