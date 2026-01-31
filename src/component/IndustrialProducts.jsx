@@ -1,17 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import  ProductCard  from "./ProductCard";
+import ProductCard from "./ProductCard";
 
- const IndustrialProducts = () => {
-    const product = {
-        id: "ind-1",
-        title: "Industrial Energy System",
-        images: [
-            "https://images.unsplash.com/photo-1582898628998-8190d3d9d614?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1716191299980-a6e8827ba10b?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop"
-        ],
-        link: "#"
-    };
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+
+const IndustrialProducts = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await fetch(`${API}/product/all?category=industrial`);
+                const data = await res.json();
+                if (data.success) {
+                    setProducts(data.products.map(p => ({
+                        ...p,
+                        title: p.name,
+                        images: p.images || [],
+                        price: p.price
+                    })));
+                }
+            } catch (err) {
+                // handle error
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
+
     return (
         <section className="py-20 bg-white transition-colors duration-300">
             <div className="container mx-auto px-6">
@@ -34,9 +52,15 @@ import  ProductCard  from "./ProductCard";
                         Designed for complex environments where reliability and safety matter most.
                     </motion.p>
                 </div>
-                <div className="w-full">
-                    <ProductCard product={product} isWide={true} />
-                </div>
+                {loading ? (
+                    <div className="text-center py-10 text-lg text-gray-500">Loading products...</div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {products.map((product) => (
+                            <ProductCard key={product._id} product={product} isWide={true} />
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );

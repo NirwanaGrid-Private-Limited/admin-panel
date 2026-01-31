@@ -8,7 +8,7 @@ const AdminPanel = () => {
   const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('admin_token'));
   const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({ name: '', description: '', category: '', images: [] });
+  const [form, setForm] = useState({ name: '', description: '', category: '', price: '', images: [] });
   const [discount, setDiscount] = useState({ name: '', discountType: '', value: '', products: '', startDate: '', endDate: '' });
   const [message, setMessage] = useState('');
 
@@ -51,6 +51,7 @@ const AdminPanel = () => {
       data.append('name', form.name);
       data.append('description', form.description);
       data.append('category', form.category);
+      data.append('price', form.price);
       if (form.images && form.images.length > 0) {
         for (let i = 0; i < form.images.length; i++) {
           data.append('images', form.images[i]);
@@ -135,6 +136,7 @@ const AdminPanel = () => {
             <h3 style={{ fontWeight: 600, fontSize: 20, marginBottom: 8, color: '#222' }}>Add Product</h3>
             <input placeholder="Name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={{ padding: 10, borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 15 }} />
             <input placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} style={{ padding: 10, borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 15 }} />
+            <input type="number" min="0" step="0.01" placeholder="Price" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} style={{ padding: 10, borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 15 }} />
             <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value, images: [] })} style={{ padding: 10, borderRadius: 8, border: '1px solid #cbd5e1', fontSize: 15 }}>
               <option value="">Select Category</option>
               <option value="home">Home</option>
@@ -183,9 +185,9 @@ const AdminPanel = () => {
             {products.map((p) => (
               <li key={p._id} style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#f7fafd', borderRadius: 10, padding: 16, boxShadow: '0 1px 4px #0001' }}>
                 <span style={{ flex: 1, fontWeight: 500, color: '#2d6cdf' }}>{p.name}</span>
-                <span style={{ minWidth: 80, color: '#333' }}>₹{p.pricePerUnit}</span>
+                <span style={{ minWidth: 80, color: '#333' }}>₹{p.price !== undefined ? p.price : p.pricePerUnit}</span>
                 <button onClick={() => handleRemoveProduct(p._id)} style={{ padding: '6px 14px', borderRadius: 6, background: '#d32f2f', color: '#fff', border: 'none', fontWeight: 500, cursor: 'pointer' }}>Remove</button>
-                <input type="number" placeholder="New Price" onBlur={e => handlePriceChange(p._id, e.target.value)} style={{ padding: 8, borderRadius: 6, border: '1px solid #cbd5e1', width: 100 }} />
+                <input type="number" placeholder="New Price" min="0" step="0.01" onBlur={e => handlePriceChange(p._id, e.target.value)} style={{ padding: 8, borderRadius: 6, border: '1px solid #cbd5e1', width: 100 }} />
               </li>
             ))}
           </ul>

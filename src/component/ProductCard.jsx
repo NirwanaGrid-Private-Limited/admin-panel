@@ -25,7 +25,7 @@ const ProductCard = ({ product, isWide = false }) => {
     >
       {/* Image Area */}
       <div 
-        className={`relative overflow-hidden bg-gray-100 ${isWide ? 'h-[300px] md:h-[400px]' : 'h-[300px]'} cursor-pointer`}
+        className={`relative overflow-hidden bg-gray-100 ${isWide ? 'h-75 md:h-100' : 'h-75'} cursor-pointer`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -47,7 +47,12 @@ const ProductCard = ({ product, isWide = false }) => {
       </div>
       {/* Content Area */}
       <div className="p-6 flex items-center justify-between border-t border-[#08213e] bg-white relative z-10 transition-colors duration-300">
-        <h3 className="text-xl md:text-2xl font-semibold text-[#05021a] transition-colors duration-300">{product.title}</h3>
+        <div>
+          <h3 className="text-xl md:text-2xl font-semibold text-[#05021a] transition-colors duration-300">{product.title}</h3>
+          {product.price !== undefined && (
+            <div className="text-lg text-[#0373ca] font-bold mt-1">₹{product.price}</div>
+          )}
+        </div>
         <div className="flex items-center gap-2 group/link cursor-pointer opacity-60 group-hover:opacity-100 transition-opacity">
           <span className="text-sm md:text-base font-semibold text-[#05021a]">Know More</span>
           <ArrowRight size={18} className="transition-transform group-hover/link:translate-x-1" />

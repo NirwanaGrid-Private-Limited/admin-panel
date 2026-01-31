@@ -19,6 +19,7 @@ const HomeProducts = () => {
             ...p,
             title: p.name,
             images: p.images || [],
+            price: p.price
           })));
         }
       } catch (err) {
