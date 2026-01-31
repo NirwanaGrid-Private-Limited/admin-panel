@@ -47,6 +47,9 @@ function Nav() {
           <Link to='/product' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Our products
           </Link>
+          <Link to='/admin' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
+            Admin Panel
+          </Link>
         </div>
 
         {/* Sign Up Button & Hamburger Menu */}

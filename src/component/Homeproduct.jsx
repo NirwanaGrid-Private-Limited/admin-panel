@@ -1,37 +1,34 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ProductCard from "./ProductCard";
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+
 const HomeProducts = () => {
-  const products = [
-    {
-      id: "1",
-      title: "Single Chip",
-      images: [
-        "https://images.unsplash.com/photo-1598845685288-98d5e7128987?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1597207837475-ea1f19435b50?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop"
-      ],
-      link: "#"
-    },
-    {
-      id: "2",
-      title: "Master Chip",
-      images: [
-        "https://images.unsplash.com/photo-1613483187636-c2024013d54a?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1754821130717-60c970da55dc?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop"
-      ],
-      link: "#"
-    },
-    {
-      id: "3",
-      title: "Customizable Chip",
-      images: [
-        "https://images.unsplash.com/photo-1763372278600-fd0b0997a7b8?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1562877773-a37120131ec4?ixlib=rb-4.1.0&q=80&w=1080&auto=format&fit=crop"
-      ],
-      link: "#"
-    }
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${API}/product/all?category=home`);
+        const data = await res.json();
+        if (data.success) {
+          setProducts(data.products.map(p => ({
+            ...p,
+            title: p.name,
+            images: p.images || [],
+          })));
+        }
+      } catch (err) {
+        // handle error
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <section className="py-20 bg-white transition-colors duration-300">
@@ -59,11 +56,15 @@ const HomeProducts = () => {
             </p>
           </motion.div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-10 text-lg text-gray-500">Loading products...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
