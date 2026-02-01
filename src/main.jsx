@@ -16,7 +16,7 @@ if (storedTheme === 'dark') {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Nev />
+<Nev/>
       <Routes>
         <Route path="/*" element={<App />} />
         <Route path="/admin" element={<AdminPanel />} />

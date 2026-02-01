@@ -22,37 +22,37 @@ function Nav() {
   }, [])
 
   return (
-    <nav className={`w-full h-[60px] sm:h-[70px] md:h-[80px] fixed top-0 left-0 z-[999] shadow-md transition-all duration-300 ${
+    <nav className={`w-full h-15 sm:h-17.5 md:h-20 fixed top-0 left-0 z-999 shadow-md transition-all duration-300 ${
       isScrolled 
         ? 'bg-white/70 backdrop-blur-md' 
         : 'bg-white'
     }`}>
-      <div className='max-w-[1400px] h-full mx-auto px-[15px] sm:px-[20px] md:px-[30px] flex items-center justify-between'>
+      <div className='max-w-350 h-full mx-auto px-3.75 sm:px-5 md:px-7.5 flex items-center justify-between'>
         {/* Logo */}
         <div className='flex items-center cursor-pointer'>
-          <img src={logo} alt="Logo" className='h-[35px] sm:h-[40px] md:h-[50px] w-auto' />
+          <img src={logo} alt="Logo" className='h-8.75 sm:h-10 md:h-12.5 w-auto' />
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className='hidden lg:flex items-center gap-[20px] xl:gap-[40px]'>
+        <div className='hidden lg:flex items-center gap-5 xl:gap-10'>
           <Link to='/' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Home
           </Link>
           <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             About us
           </button>
-          <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
+          <Link to="/contact" className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Contact us
-          </button>
+          </Link>
           <Link to='/product' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Our products
           </Link>
         </div>
 
         {/* Sign Up Button & Hamburger Menu */}
-       <div className='flex items-center gap-[10px] md:gap-[15px]'>
-  <button className='hidden md:flex items-center gap-[6px] lg:gap-[8px] px-[15px] lg:px-[20px] py-[6px] lg:py-[8px] border-[2px] border-black rounded-[6px] text-slate-700 text-[12px] lg:text-[14px] font-normal hover:border-black transition-all duration-200 bg-white hover:bg-[#E5E5E5]'>
-    <CgProfile  className='w-[18px] h-[18px] lg:w-[23px] lg:h-[23px]' />
+      <div className='flex items-center gap-2.5 md:gap-3.75'>
+  <button className='hidden md:flex items-center gap-1.5 lg:gap-2 px-3.75 lg:px-5 py-1.5 lg:py-2 border-2 border-black rounded-md text-slate-700 text-[12px] lg:text-[14px] font-normal hover:border-black transition-all duration-200 bg-white hover:bg-[#E5E5E5]'>
+    <CgProfile  className='w-4.5 h-4.5 lg:w-5.75 lg:h-5.75' />
     
     <span className='hidden lg:inline'>Sign Up</span>
     <span className='lg:hidden'>Sign</span>
@@ -64,9 +64,9 @@ function Nav() {
             className='text-slate-900 hover:text-[#5FD068] transition-colors duration-200 p-1 lg:hidden'
           >
             {isMenuOpen ? (
-              <X className='w-[24px] h-[24px] sm:w-[26px] sm:h-[26px]' />
+              <X className='w-6 h-6 sm:w-6.5 sm:h-6.5' />
             ) : (
-              <Menu className='w-[24px] h-[24px] sm:w-[26px] sm:h-[26px]' />
+              <Menu className='w-6 h-6 sm:w-6.5 sm:h-6.5' />
             )}
           </button>
         </div>
@@ -74,8 +74,8 @@ function Nav() {
 
       {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
-        <div className='absolute top-[60px] sm:top-[70px] md:top-[80px] left-0 w-full bg-white border-t border-black shadow-lg'>
-          <div className='flex flex-col py-[15px] sm:py-[20px] px-[20px] sm:px-[30px] gap-[15px] sm:gap-[20px]'>
+        <div className='absolute top-15 sm:top-17.5 md:top-20 left-0 w-full bg-white border-t border-black shadow-lg'>
+          <div className='flex flex-col py-3.75 sm:py-5 px-5 sm:px-7.5 gap-3.75 sm:gap-5'>
             <button 
               onClick={() => setIsMenuOpen(false)}
               className='text-slate-700 text-[14px] sm:text-[15px] font-normal text-left hover:text-[#A5FF46] transition-colors duration-200 py-2 border-b border-black'
@@ -88,12 +88,13 @@ function Nav() {
             >
               About us
             </button>
-            <button 
+            <Link 
+              to="/contact"
               onClick={() => setIsMenuOpen(false)}
               className='text-slate-700 text-[14px] sm:text-[15px] font-normal text-left hover:text-[#A5FF46] transition-colors duration-200 py-2 border-b border-black'
             >
               Contact us
-            </button>
+            </Link>
             <Link 
               to='/product'
               onClick={() => setIsMenuOpen(false)}
@@ -103,7 +104,7 @@ function Nav() {
             </Link>
             <button 
               onClick={() => setIsMenuOpen(false)}
-              className='flex items-center gap-[10px] px-[15px] sm:px-[20px] py-[8px] border-[1.5px] border-black rounded-[6px] text-slate-700 text-[14px] font-normal hover:border-black transition-all duration-200 w-fit mt-2'
+              className='flex items-center gap-2.5 px-3.75 sm:px-5 py-2 border-black rounded-md text-slate-700 text-[14px] font-normal hover:border-black transition-all duration-200 w-fit mt-2'
             >
               <CgProfile  className='w-[20px] h-[20px] sm:w-[23px] sm:h-[23px]' />
               Sign Up
