@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: *,
+    origin: https://admin-panel-utq4.onrender.com,
     credentials: true,
   })
 );
