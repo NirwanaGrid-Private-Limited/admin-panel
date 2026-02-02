@@ -43,6 +43,7 @@ exports.createProduct = async (req, res) => {
 };
 
 // GET ALL PRODUCTS (ADMIN / UI)
+// GET ALL PRODUCTS (ADMIN / UI)
 exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find({ isActive: true })
@@ -54,25 +55,58 @@ exports.getProducts = async (req, res) => {
         }
       });
 
+    // 🔥 DEBUG: Check products
+    console.log("Total Products Found:", products.length);
+
     const discounts = await Discount.find({
       startDate: { $lte: new Date() },
       endDate: { $gte: new Date() }
-  });
+    });
+
+    // 🔥 DEBUG: Check active discounts
+    console.log("Active Discounts Found:", discounts.length);
+    console.log("Discounts:", JSON.stringify(discounts, null, 2));
 
     const updatedProducts = products.map((product) => {
-      // 🔥 find bulk discount
+      // 🔥 Find bulk discount for this product
       const bulkDiscount = discounts.find((d) =>
-        d.products.some(p => p.toString() === product._id.toString())
+        d.products.some((p) => p.toString() === product._id.toString())
       );
+
+      // 🔥 DEBUG: Check if discount found
+      console.log(`Product: ${product.name}, ID: ${product._id}`);
+      console.log(`Bulk Discount Found: ${bulkDiscount ? bulkDiscount.name : 'None'}`);
 
       let finalPrice = product.price;
       let appliedDiscount = null;
 
       if (bulkDiscount) {
-        finalPrice = calculateFinalPrice(product.price, bulkDiscount);
-        appliedDiscount = bulkDiscount;
-      } else if (product.discountActive) {
-        finalPrice = product.price - (product.price * product.discount) / 100;
+        // 🔥 Apply bulk discount
+        if (bulkDiscount.discountType === "percentage") {
+          finalPrice = Math.round(product.price - (product.price * bulkDiscount.value) / 100);
+        } else {
+          finalPrice = Math.max(0, product.price - bulkDiscount.value);
+        }
+        appliedDiscount = {
+          _id: bulkDiscount._id,
+          name: bulkDiscount.name,
+          discountType: bulkDiscount.discountType,
+          value: bulkDiscount.value
+        };
+        
+        console.log(`Applied Discount: ${bulkDiscount.value}${bulkDiscount.discountType === 'percentage' ? '%' : '₹'}`);
+        console.log(`Original Price: ${product.price}, Final Price: ${finalPrice}`);
+      } else if (product.discountActive && product.discount > 0) {
+        // 🔥 Apply individual product discount
+        finalPrice = Math.round(product.price - (product.price * product.discount) / 100);
+        appliedDiscount = {
+          discountType: "percentage",
+          value: product.discount,
+          isProductDiscount: true
+        };
+        
+        console.log(`Product Discount Active: ${product.discount}%`);
+        console.log(`Original Price: ${product.price}, Final Price: ${finalPrice}`);
       }
 
       return {
@@ -84,6 +118,7 @@ exports.getProducts = async (req, res) => {
 
     res.json({
       success: true,
+      count: updatedProducts.length,
       products: updatedProducts
     });
   } catch (err) {
@@ -96,7 +131,6 @@ exports.getProducts = async (req, res) => {
 };
 
 
-// GET SINGLE PRODUCT
 // GET SINGLE PRODUCT
 exports.getProductById = async (req, res) => {
   try {

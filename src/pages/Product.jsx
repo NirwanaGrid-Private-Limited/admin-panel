@@ -9,16 +9,14 @@ export default function Product() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [products, setProducts] = useState([]);
-  const [discounts, setDiscounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  /* ================= FETCH DATA ================= */
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         const [productsRes, discountsRes] = await Promise.all([
           getProducts(),
           getDiscounts()
@@ -27,57 +25,97 @@ export default function Product() {
         const allProducts = productsRes.data.products || [];
         const allDiscounts = discountsRes.data.discounts || [];
 
-        // Apply discounts to products
-        const productsWithDiscounts = allProducts.map((product) => {
-          const now = new Date();
-          
-          // Find active discount for this product
-          const activeDiscount = allDiscounts.find((discount) => {
-            const isActive = 
-              new Date(discount.startDate) <= now && 
-              new Date(discount.endDate) >= now;
-            
-            const hasProduct = discount.products.some(
-              (p) => (typeof p === "string" ? p : p._id) === product._id
-            );
-            
-            return isActive && hasProduct;
-          });
+        console.log("All Products:", allProducts);
+        console.log("All Discounts:", allDiscounts);
 
-          if (activeDiscount) {
-            const discountValue = activeDiscount.value;
-            const discountType = activeDiscount.discountType;
-            
-            let finalPrice;
-            if (discountType === "percentage") {
-              finalPrice = product.price - (product.price * discountValue / 100);
+        // 🔥 Get today's date (without time)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        console.log("Today (normalized):", today);
+
+        const discountMap = {};
+
+        allDiscounts.forEach((discount) => {
+          // 🔥 Parse dates and remove time component
+          const startDate = new Date(discount.startDate);
+          startDate.setHours(0, 0, 0, 0);
+
+          const endDate = new Date(discount.endDate);
+          endDate.setHours(23, 59, 59, 999); // End of day
+
+          console.log(`Discount: ${discount.name}`);
+          console.log(`Start: ${startDate}, End: ${endDate}, Today: ${today}`);
+
+          // 🔥 Check if discount is active
+          const isActive = today >= startDate && today <= endDate;
+          console.log(`Is Active: ${isActive}`);
+
+          if (isActive && discount.products?.length > 0) {
+            discount.products.forEach((p) => {
+              const productId = p._id || p;
+              console.log(`Adding to map: ${p.name || productId}`);
+              
+              discountMap[productId] = {
+                discountType: discount.discountType,
+                value: discount.value,
+                name: discount.name
+              };
+            });
+          }
+        });
+
+        console.log("Final Discount Map:", discountMap);
+
+        // 🔥 Apply discounts to products
+        const productsWithDiscounts = allProducts.map((product) => {
+          const productPrice = product.price || 0;
+          const discount = discountMap[product._id];
+
+          console.log(`Product: ${product.name}, ID: ${product._id}, Discount:`, discount);
+
+          if (discount) {
+            let finalPrice = productPrice;
+
+            if (discount.discountType === "percentage") {
+              finalPrice = productPrice - (productPrice * discount.value) / 100;
             } else {
-              finalPrice = product.price - discountValue;
+              finalPrice = productPrice - discount.value;
             }
+
+            finalPrice = Math.max(0, Math.round(finalPrice));
+
+            console.log(`✅ Discount Applied! Original: ${productPrice}, Final: ${finalPrice}`);
 
             return {
               ...product,
-              originalPrice: product.price,
-              finalPrice: Math.max(0, Math.round(finalPrice)),
-              discount: discountType === "percentage" ? discountValue : null,
-              discountAmount: discountType === "flat" ? discountValue : null,
-              hasDiscount: true
+              originalPrice: productPrice,
+              finalPrice,
+              hasDiscount: true,
+              discountType: discount.discountType,
+              discountValue: discount.value,
+              discountName: discount.name,
+              savings: productPrice - finalPrice
             };
           }
 
           return {
             ...product,
-            originalPrice: product.price,
-            finalPrice: product.price,
-            hasDiscount: false
+            originalPrice: productPrice,
+            finalPrice: productPrice,
+            hasDiscount: false,
+            discountType: null,
+            discountValue: 0,
+            discountName: null,
+            savings: 0
           };
         });
 
+        console.log("Products with Discounts:", productsWithDiscounts);
         setProducts(productsWithDiscounts);
-        setDiscounts(allDiscounts);
-        
+
       } catch (err) {
-        console.error("Error fetching data:", err);
+        console.error("Error:", err);
         setError("Failed to load products");
       } finally {
         setLoading(false);
@@ -87,25 +125,21 @@ export default function Product() {
     fetchData();
   }, []);
 
-  /* ================= GROUP BY CATEGORY ================= */
+  const formatPrice = (price) => {
+    if (price === undefined || price === null || isNaN(price)) return "0";
+    return Number(price).toLocaleString();
+  };
+
   const getProductsByCategory = () => {
     const grouped = {};
-    
     products.forEach((product) => {
-      const categoryName = product.subCategory?.category?.name || 
-                          product.subCategory?.name || 
-                          "Other";
-      
-      if (!grouped[categoryName]) {
-        grouped[categoryName] = [];
-      }
+      const categoryName = product.subCategory?.category?.name || product.subCategory?.name || "Other";
+      if (!grouped[categoryName]) grouped[categoryName] = [];
       grouped[categoryName].push(product);
     });
-
     return grouped;
   };
 
-  /* ================= MODAL HANDLERS ================= */
   useEffect(() => {
     if (selectedProduct) {
       setSelectedImageIndex(0);
@@ -113,29 +147,21 @@ export default function Product() {
     } else {
       document.body.style.overflow = "auto";
     }
-    
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    return () => { document.body.style.overflow = "auto"; };
   }, [selectedProduct]);
 
   const handlePrevImage = () => {
-    if (!selectedProduct) return;
-    setSelectedImageIndex((prev) =>
-      prev === 0 ? selectedProduct.images.length - 1 : prev - 1
-    );
+    if (!selectedProduct?.images?.length) return;
+    setSelectedImageIndex((prev) => prev === 0 ? selectedProduct.images.length - 1 : prev - 1);
   };
 
   const handleNextImage = () => {
-    if (!selectedProduct) return;
-    setSelectedImageIndex((prev) =>
-      prev === selectedProduct.images.length - 1 ? 0 : prev + 1
-    );
+    if (!selectedProduct?.images?.length) return;
+    setSelectedImageIndex((prev) => prev === selectedProduct.images.length - 1 ? 0 : prev + 1);
   };
 
   const productsByCategory = getProductsByCategory();
 
-  /* ================= LOADING STATE ================= */
   if (loading) {
     return (
       <>
@@ -153,7 +179,6 @@ export default function Product() {
     );
   }
 
-  /* ================= ERROR STATE ================= */
   if (error) {
     return (
       <>
@@ -162,16 +187,13 @@ export default function Product() {
           <div className="error-icon">⚠️</div>
           <h2>Oops! Something went wrong</h2>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>
-            Try Again
-          </button>
+          <button onClick={() => window.location.reload()}>Try Again</button>
         </div>
         <Footer />
       </>
     );
   }
 
-  /* ================= EMPTY STATE ================= */
   if (products.length === 0) {
     return (
       <>
@@ -186,15 +208,10 @@ export default function Product() {
     );
   }
 
-  /* ================= MAIN UI ================= */
   return (
     <>
       <Nav />
-
       <div className="products-page">
-    
-
-        {/* Products by Category */}
         <section className="products-content">
           {Object.entries(productsByCategory).map(([category, categoryProducts]) => (
             <div key={category} className="category-block">
@@ -202,7 +219,7 @@ export default function Product() {
                 <div className="heading-left">
                   <h2>{category}</h2>
                   <span className="product-count">
-                    {categoryProducts.length} {categoryProducts.length === 1 ? 'item' : 'items'}
+                    {categoryProducts.length} {categoryProducts.length === 1 ? "item" : "items"}
                   </span>
                 </div>
                 <div className="heading-line"></div>
@@ -215,21 +232,18 @@ export default function Product() {
                     className="product-card"
                     onClick={() => setSelectedProduct(product)}
                   >
-                    {/* Discount Badge */}
                     {product.hasDiscount && (
                       <div className="sale-badge">
-                        {product.discount 
-                          ? `-${product.discount}%` 
-                          : `-₹${product.discountAmount}`
-                        }
+                        {product.discountType === "percentage"
+                          ? `-${product.discountValue}%`
+                          : `-₹${product.discountValue}`}
                       </div>
                     )}
 
-                    {/* Product Image */}
                     <div className="card-image">
                       <img
                         src={product.images?.[0]?.url || "/placeholder.jpg"}
-                        alt={product.name}
+                        alt={product.name || "Product"}
                         loading="lazy"
                       />
                       <div className="image-overlay">
@@ -237,24 +251,20 @@ export default function Product() {
                       </div>
                     </div>
 
-                    {/* Product Details */}
                     <div className="card-content">
-                      <h3 className="product-title">{product.name}</h3>
-                      
-                      <p className="product-category">
-                        {product.subCategory?.name}
-                      </p>
+                      <h3 className="product-title">{product.name || "Unnamed"}</h3>
+                      <p className="product-category">{product.subCategory?.name || ""}</p>
 
                       <div className="price-section">
-                        <span className="current-price">
-                          ₹{product.finalPrice.toLocaleString()}
-                        </span>
+                        <span className="current-price">₹{formatPrice(product.finalPrice)}</span>
                         {product.hasDiscount && (
-                          <span className="original-price">
-                            ₹{product.originalPrice.toLocaleString()}
-                          </span>
+                          <span className="original-price">₹{formatPrice(product.originalPrice)}</span>
                         )}
                       </div>
+
+                      {product.hasDiscount && product.savings > 0 && (
+                        <div className="savings-tag">Save ₹{formatPrice(product.savings)}</div>
+                      )}
                     </div>
                   </article>
                 ))}
@@ -264,23 +274,16 @@ export default function Product() {
         </section>
       </div>
 
-      {/* Product Modal */}
       {selectedProduct && (
         <div className="product-modal" onClick={() => setSelectedProduct(null)}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-            {/* Close Button */}
-            <button
-              className="modal-close"
-              onClick={() => setSelectedProduct(null)}
-              aria-label="Close modal"
-            >
+            <button className="modal-close" onClick={() => setSelectedProduct(null)}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             </button>
 
             <div className="modal-grid">
-              {/* Image Gallery */}
               <div className="modal-gallery">
                 <div className="gallery-main">
                   {selectedProduct.images?.length > 1 && (
@@ -290,13 +293,11 @@ export default function Product() {
                       </svg>
                     </button>
                   )}
-
                   <img
                     src={selectedProduct.images?.[selectedImageIndex]?.url || "/placeholder.jpg"}
                     alt={selectedProduct.name}
                     className="main-image"
                   />
-
                   {selectedProduct.images?.length > 1 && (
                     <button className="gallery-nav next" onClick={handleNextImage}>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -304,15 +305,12 @@ export default function Product() {
                       </svg>
                     </button>
                   )}
-
                   {selectedProduct.images?.length > 1 && (
                     <div className="image-indicator">
                       {selectedImageIndex + 1} / {selectedProduct.images.length}
                     </div>
                   )}
                 </div>
-
-                {/* Thumbnails */}
                 {selectedProduct.images?.length > 1 && (
                   <div className="gallery-thumbs">
                     {selectedProduct.images.map((img, idx) => (
@@ -321,40 +319,48 @@ export default function Product() {
                         className={`thumb ${idx === selectedImageIndex ? "active" : ""}`}
                         onClick={() => setSelectedImageIndex(idx)}
                       >
-                        <img src={img.url} alt="" />
+                        <img src={img?.url} alt="" />
                       </button>
                     ))}
                   </div>
                 )}
               </div>
 
-              {/* Product Info */}
               <div className="modal-info">
                 <div className="info-header">
                   <span className="info-category">
-                    {selectedProduct.subCategory?.category?.name || selectedProduct.subCategory?.name}
+                    {selectedProduct.subCategory?.category?.name || selectedProduct.subCategory?.name || "Product"}
                   </span>
                   <h2 className="info-title">{selectedProduct.name}</h2>
                 </div>
 
                 <div className="info-price">
-                  <span className="price-current">
-                    ₹{selectedProduct.finalPrice.toLocaleString()}
-                  </span>
+                  <span className="price-current">₹{formatPrice(selectedProduct.finalPrice)}</span>
                   {selectedProduct.hasDiscount && (
                     <>
-                      <span className="price-original">
-                        ₹{selectedProduct.originalPrice.toLocaleString()}
-                      </span>
+                      <span className="price-original">₹{formatPrice(selectedProduct.originalPrice)}</span>
                       <span className="price-discount">
-                        {selectedProduct.discount 
-                          ? `${selectedProduct.discount}% OFF` 
-                          : `₹${selectedProduct.discountAmount} OFF`
-                        }
+                        {selectedProduct.discountType === "percentage"
+                          ? `${selectedProduct.discountValue}% OFF`
+                          : `₹${selectedProduct.discountValue} OFF`}
                       </span>
                     </>
                   )}
                 </div>
+
+                {selectedProduct.hasDiscount && selectedProduct.savings > 0 && (
+                  <div className="savings-highlight">
+                    <span>🎉</span>
+                    <span>You save ₹{formatPrice(selectedProduct.savings)} on this product!</span>
+                  </div>
+                )}
+
+                {selectedProduct.discountName && (
+                  <div className="discount-name-badge">
+                    <span>🏷️</span>
+                    <span>{selectedProduct.discountName}</span>
+                  </div>
+                )}
 
                 {selectedProduct.description && (
                   <div className="info-description">
@@ -366,23 +372,37 @@ export default function Product() {
                 <div className="info-meta">
                   <div className="meta-item">
                     <span className="meta-label">Category</span>
-                    <span className="meta-value">
-                      {selectedProduct.subCategory?.category?.name || "N/A"}
-                    </span>
+                    <span className="meta-value">{selectedProduct.subCategory?.category?.name || "N/A"}</span>
                   </div>
                   <div className="meta-item">
                     <span className="meta-label">Sub Category</span>
-                    <span className="meta-value">
-                      {selectedProduct.subCategory?.name || "N/A"}
-                    </span>
+                    <span className="meta-value">{selectedProduct.subCategory?.name || "N/A"}</span>
+                  </div>
+                  <div className="meta-item">
+                    <span className="meta-label">Original Price</span>
+                    <span className="meta-value">₹{formatPrice(selectedProduct.originalPrice)}</span>
                   </div>
                   {selectedProduct.hasDiscount && (
-                    <div className="meta-item highlight">
-                      <span className="meta-label">You Save</span>
-                      <span className="meta-value savings">
-                        ₹{(selectedProduct.originalPrice - selectedProduct.finalPrice).toLocaleString()}
-                      </span>
-                    </div>
+                    <>
+                      <div className="meta-item">
+                        <span className="meta-label">Discount</span>
+                        <span className="meta-value" style={{ color: "#dc2626" }}>
+                          {selectedProduct.discountType === "percentage"
+                            ? `${selectedProduct.discountValue}%`
+                            : `₹${selectedProduct.discountValue}`}
+                        </span>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-label">Final Price</span>
+                        <span className="meta-value" style={{ color: "#059669", fontWeight: 700 }}>
+                          ₹{formatPrice(selectedProduct.finalPrice)}
+                        </span>
+                      </div>
+                      <div className="meta-item highlight">
+                        <span className="meta-label">Total Savings</span>
+                        <span className="meta-value savings">₹{formatPrice(selectedProduct.savings)}</span>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

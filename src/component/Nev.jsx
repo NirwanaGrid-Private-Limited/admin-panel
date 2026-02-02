@@ -28,6 +28,7 @@ function Nav() {
         : 'bg-white'
     }`}>
       <div className='max-w-350 h-full mx-auto px-3.75 sm:px-5 md:px-7.5 flex items-center justify-between'>
+        
         {/* Logo */}
         <div className='flex items-center cursor-pointer'>
           <img src={logo} alt="Logo" className='h-8.75 sm:h-10 md:h-12.5 w-auto' />
