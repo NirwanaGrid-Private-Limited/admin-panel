@@ -1,0 +1,153 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6f8;
+}
+
+.admin-content {
+  flex: 1;
+  margin-left: 280px; /* 🔥 Sidebar width */
+  padding: 25px;
+  overflow-x: auto;
+  width: calc(100% - 280px); /* 🔥 Proper width calculation */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-content {
+    margin-left: 70px; /* 🔥 Collapsed sidebar width */
+    width: calc(100% - 70px);
+  }
+}
+
+
+/* ==========================================
+   TABLET (768px - 1024px)
+========================================== */
+
+@media (max-width: 1024px) {
+  .admin-main {
+    margin-left: 240px;
+  }
+
+  .admin-content {
+    padding: 24px;
+  }
+}
+
+/* ==========================================
+   MOBILE (768px and below) - FULL WIDTH
+========================================== */
+
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-main {
+    margin-left: 0;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .admin-content {
+    padding: 70px 16px 16px 16px; /* Top padding for menu button */
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE (576px and below)
+========================================== */
+
+@media (max-width: 576px) {
+  .admin-content {
+    padding: 65px 12px 12px 12px;
+  }
+}
+
+/* ==========================================
+   EXTRA SMALL MOBILE (400px and below)
+========================================== */
+
+@media (max-width: 400px) {
+  .admin-content {
+    padding: 60px 10px 10px 10px;
+  }
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.admin-main {
+  flex: 1;
+  margin-left: 280px; /* Sidebar width ke barabar */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: calc(100% - 280px); /* Important: Remaining width */
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ==========================================
+   TABLET (768px - 1024px)
+========================================== */
+
+@media (max-width: 1024px) {
+  .admin-main {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+  }
+
+  .admin-content {
+    padding: 24px;
+  }
+}
+
+/* ==========================================
+   MOBILE (768px and below) - FULL WIDTH
+========================================== */
+
+@media (max-width: 768px) {
+  .admin-layout {
+    display: block;
+  }
+
+  .admin-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .admin-content {
+    padding: 70px 16px 16px 16px;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-content {
+    padding: 65px 12px 12px 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .admin-content {
+    padding: 60px 10px 10px 10px;
+  }
+}
