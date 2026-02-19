@@ -39,9 +39,9 @@ function Nav() {
           <Link to='/' className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Home
           </Link>
-          <button className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
+          <Link to="/aboutus" className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             About us
-          </button>
+          </Link>
           <Link to="/contact" className='text-slate-700 text-[16px] lg:text-[18px] xl:text-[20px] font-roboto hover:text-[#A5FF46] transition-colors duration-200'>
             Contact us
           </Link>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function SliderProgress({ currentSlide, setCurrentSlide, totalSlides }) {
+export default function SliderProgress({ currentSlide, setCurrentSlide, totalSlides, activeColor = '#A5FF46', inactiveColor = 'rgba(255, 255, 255, 0.3)' }) {
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
@@ -14,7 +14,7 @@ export default function SliderProgress({ currentSlide, setCurrentSlide, totalSli
           className="h-1 transition-all duration-300 ease-out rounded-full"
           style={{
             width: index === currentSlide ? '32px' : '8px',
-            backgroundColor: index === currentSlide ? '#A5FF46' : 'rgba(255, 255, 255, 0.3)',
+            backgroundColor: index === currentSlide ? activeColor : inactiveColor,
           }}
           aria-label={`Go to slide ${index + 1}`}
         ></button>

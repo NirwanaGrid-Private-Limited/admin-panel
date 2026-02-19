@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-export default function NavigationButtons({ currentSlide, setCurrentSlide, totalSlides, borderColor = "#000" }) {
+export default function NavigationButtons({ currentSlide, setCurrentSlide, totalSlides, borderColor = "#000", iconColor }) {
   const goToPrevious = () => {
     setCurrentSlide((prev) => (prev > 0 ? prev - 1 : totalSlides - 1));
   };
@@ -18,7 +18,10 @@ export default function NavigationButtons({ currentSlide, setCurrentSlide, total
         style={{ borderColor: borderColor }}
         aria-label="Previous slide"
       >
-        <ChevronLeft className="w-5 h-5 text-slate-500 group-hover:text-slate-900 transition-colors" />
+        <ChevronLeft
+          className="w-5 h-5 transition-colors"
+          style={{ color: iconColor || undefined }}
+        />
       </button>
       <button
         onClick={goToNext}
@@ -26,7 +29,10 @@ export default function NavigationButtons({ currentSlide, setCurrentSlide, total
         style={{ borderColor: borderColor }}
         aria-label="Next slide"
       >
-        <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-slate-900 transition-colors" />
+        <ChevronRight
+          className="w-5 h-5 transition-colors"
+          style={{ color: iconColor || undefined }}
+        />
       </button>
     </div>
   );
